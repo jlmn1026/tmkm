@@ -3,6 +3,7 @@ import TopPage from '@/pages/TopPage';
 import { Spin } from 'antd';
 import { Suspense } from 'react';
 import { Outlet, useRoutes } from 'react-router-dom';
+import { PageRoute } from './pageRoute';
 
 const BaseLayout = () => {
   return (
@@ -27,7 +28,22 @@ export const AppRoutes = () => {
     {
       path: '/',
       element: <BaseLayout />,
-      children: [{ path: '/', element: <TopPage /> }],
+      children: [{ path: PageRoute.Top, element: <TopPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: PageRoute.CreateDeck, element: <TopPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: PageRoute.CreateCard, element: <TopPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: PageRoute.Study, element: <TopPage /> }],
     },
   ];
 
