@@ -1,19 +1,15 @@
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 
-import { Button } from '@/components/Elements';
-import { Notifications } from '@/components/Notifications/Notifications';
-import { AuthProvider } from '@/lib/auth';
+import { Button } from 'antd';
 
 const ErrorFallback = () => {
   return (
     <div role="alert">
-      <h2 className="text-lg font-semibold">Ooops, something went wrong :( </h2>
-      <Button className="mt-4" onClick={() => window.location.assign(window.location.origin)}>
-        Refresh
-      </Button>
+      <h2>Ooops, something went wrong :( </h2>
+      <Button onClick={() => window.location.assign(window.location.origin)}>Refresh</Button>
     </div>
   );
 };
@@ -35,10 +31,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
           {/* TODO: jotai */}
-          <Notifications />
-          <AuthProvider>
-            <Router>{children}</Router>
-          </AuthProvider>
+          <Router>{children}</Router>
         </HelmetProvider>
       </ErrorBoundary>
     </React.Suspense>
