@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { HashRouter as Router } from 'react-router-dom';
 
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 
 const ErrorFallback = () => {
   return (
@@ -24,7 +24,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       fallback={
         <div>
           {/* TODO: icon */}
-          Loading...
+          <Spin size="large" />
         </div>
       }
     >

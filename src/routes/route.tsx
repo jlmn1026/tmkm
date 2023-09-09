@@ -1,10 +1,35 @@
+import MainLayout from '@/common-ui/layout/MainLayout';
 import TopPage from '@/pages/TopPage';
-import { useRoutes } from 'react-router-dom';
+import { Spin } from 'antd';
+import { Suspense } from 'react';
+import { Outlet, useRoutes } from 'react-router-dom';
+
+const BaseLayout = () => {
+  return (
+    <MainLayout>
+      <Suspense
+        fallback={
+          <div>
+            <Spin size="large" />
+          </div>
+        }
+      >
+        <Outlet />
+      </Suspense>
+    </MainLayout>
+  );
+};
 
 export const AppRoutes = () => {
   // const auth = useAuth();
 
-  const publicRoutes = [{ path: '/', element: <TopPage /> }];
+  const publicRoutes = [
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: '/', element: <TopPage /> }],
+    },
+  ];
 
   // const protectedRoutes = [
   //   {
