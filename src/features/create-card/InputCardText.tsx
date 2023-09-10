@@ -2,21 +2,23 @@ import { styled } from '@stitches/react';
 import { Button, Input, Row } from 'antd';
 
 type Props = React.ButtonHTMLAttributes<HTMLInputElement> & {
-  cardnum: number;
-  onDelete: () => void;
+  cardNum: number;
+  handleDelete: () => void;
 };
 
 const InputCardText = (props: Props) => {
+  const { cardNum, handleDelete, ...rest } = props;
+
   return (
     <>
       <InputHeader>
-        <InputLabel>Input Text {props.cardnum}</InputLabel>
-        <Button size="small" onClick={props.onDelete}>
+        <InputLabel>Input Text {cardNum}</InputLabel>
+        <Button size="small" onClick={handleDelete}>
           Delete
         </Button>
       </InputHeader>
 
-      <Input {...props} />
+      <Input {...rest} />
     </>
   );
 };

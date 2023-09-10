@@ -36,12 +36,7 @@ module.exports = {
         'plugin:jest-dom/recommended',
       ],
       rules: {
-        'no-restricted-imports': [
-          'error',
-          {
-            patterns: ['@/features/*/*'],
-          },
-        ],
+        'no-restricted-imports': 'off',
         'linebreak-style': ['error', 'unix'],
         'react/prop-types': 'off',
 

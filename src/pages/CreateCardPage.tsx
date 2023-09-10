@@ -1,9 +1,11 @@
 import CommonContainer from '@/common-ui/CommonContainer';
 import HeadlessButton from '@/common-ui/HeadlessButton';
 import InputCardText from '@/features/create-card/InputCardText';
+import { addCard } from '@/features/create-card/cardStore';
 import { InputCard } from '@/features/create-card/constant';
-import { styled } from '@/stitches.config';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { styled } from '@stitches/react';
+import { Button, notification } from 'antd';
 
 import { useState } from 'react';
 let inputTimeId: NodeJS.Timeout;
@@ -26,8 +28,8 @@ const CreateCardPage = () => {
         return (
           <InputCardText
             key={inputText.id}
-            cardnum={index + 1}
-            onDelete={() => {
+            cardNum={index + 1}
+            handleDelete={() => {
               setInputTexts(inputTexts.filter((item, index2) => index2 !== index));
             }}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,24 +42,49 @@ const CreateCardPage = () => {
           />
         );
       })}
+      <Footer>
+        {inputTexts.length < 10 && (
+          <HeadlessButton
+            onClick={() => {
+              setInputTexts([
+                ...inputTexts,
+                {
+                  id: crypto.randomUUID(),
+                  text: '',
+                },
+              ]);
+            }}
+          >
+            <PlusCircleOutlined style={{ fontSize: '24px', color: '#fff', marginTop: '8px' }} />
+          </HeadlessButton>
+        )}
 
-      {inputTexts.length < 10 && (
-        <HeadlessButton
+        <Button
+          style={{
+            marginTop: '48px',
+          }}
           onClick={() => {
-            setInputTexts([
-              ...inputTexts,
-              {
-                id: crypto.randomUUID(),
-                text: '',
-              },
-            ]);
+            try {
+              addCard(inputTexts);
+              notification.success({
+                message: 'new Card created!',
+              });
+            } catch (error) {
+              console.log(error);
+            }
           }}
         >
-          <PlusCircleOutlined style={{ fontSize: '24px', color: '#fff', marginTop: '8px' }} />
-        </HeadlessButton>
-      )}
+          Create
+        </Button>
+      </Footer>
     </CommonContainer>
   );
 };
 
 export default CreateCardPage;
+
+const Footer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  marginTop: '12px',
+});
