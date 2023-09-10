@@ -10,17 +10,19 @@ import { Button, notification } from 'antd';
 import { useState } from 'react';
 let inputTimeId: NodeJS.Timeout;
 
+const defaultTextCards = [
+  {
+    id: crypto.randomUUID(),
+    text: '',
+  },
+  {
+    id: crypto.randomUUID(),
+    text: '',
+  },
+];
+
 const CreateCardPage = () => {
-  const [inputTexts, setInputTexts] = useState<InputCard[]>([
-    {
-      id: crypto.randomUUID(),
-      text: '',
-    },
-    {
-      id: crypto.randomUUID(),
-      text: '',
-    },
-  ]);
+  const [inputTexts, setInputTexts] = useState<InputCard[]>(defaultTextCards);
 
   return (
     <CommonContainer>
@@ -30,7 +32,7 @@ const CreateCardPage = () => {
             key={inputText.id}
             cardNum={index + 1}
             handleDelete={() => {
-              setInputTexts(inputTexts.filter((item, index2) => index2 !== index));
+              setInputTexts(inputTexts.filter((_item, index2) => index2 !== index));
             }}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               clearTimeout(inputTimeId);
@@ -69,6 +71,7 @@ const CreateCardPage = () => {
               notification.success({
                 message: 'new Card created!',
               });
+              setInputTexts(defaultTextCards);
             } catch (error) {
               console.log(error);
             }

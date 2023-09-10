@@ -6,6 +6,10 @@ export const menus = [
     link: PageRoute.CreateDeck,
   },
   {
+    name: 'Card List',
+    link: PageRoute.CardList,
+  },
+  {
     name: 'Create Card',
     link: PageRoute.CreateCard,
   },

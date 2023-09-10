@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { Outlet, useRoutes } from 'react-router-dom';
 import { PageRoute } from './pageRoute';
 import CreateCardPage from '@/pages/CreateCardPage';
+import CardListPage from '@/pages/CardListPage';
 
 const BaseLayout = () => {
   return (
@@ -40,6 +41,11 @@ export const AppRoutes = () => {
       path: '/',
       element: <BaseLayout />,
       children: [{ path: PageRoute.CreateCard, element: <CreateCardPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: PageRoute.CardList, element: <CardListPage /> }],
     },
     {
       path: '/',
