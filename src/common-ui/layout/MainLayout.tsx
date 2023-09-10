@@ -1,8 +1,8 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { keyframes, styled } from '@/stitches.config.ts';
 import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import HeadlessButton from '../HeadlessButton';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { menus } from './menu';
 
 type Props = {
@@ -10,7 +10,15 @@ type Props = {
 };
 
 const MainLayout = ({ children }: Props) => {
+  const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState<'start' | 'show' | 'hide'>('start');
+
+  const movePage = useCallback(
+    (link: string) => {
+      navigate(link);
+    },
+    [navigate]
+  );
 
   return (
     <>
@@ -45,9 +53,15 @@ const MainLayout = ({ children }: Props) => {
         </MenuHeader>
         {menus.map((menu) => {
           return (
-            <Link to={menu.link} key={menu.link}>
-              <MenuItem>{menu.name}</MenuItem>
-            </Link>
+            <MenuItem
+              key={menu.link}
+              onClick={() => {
+                setOpenMenu('hide');
+                movePage(menu.link);
+              }}
+            >
+              {menu.name}
+            </MenuItem>
           );
         })}
       </MenuSlider>
@@ -103,6 +117,7 @@ const MenuSlider = styled('div', {
   background: '#223344',
   height: '100vh',
   width: '250px',
+  zIndex: '1001',
 });
 
 const MenuHeader = styled('div', {
@@ -118,6 +133,7 @@ const MenuItem = styled('div', {
   '&:hover': {
     opacity: 0.75,
   },
+  cursor: 'pointer',
 });
 
 const MenuBackground = styled('div', {
@@ -127,6 +143,8 @@ const MenuBackground = styled('div', {
   width: '100vw',
   height: '100vh',
   opacity: 0.7,
+  zIndex: '1000',
+  background: '#333',
 });
 
 const HeaderTitle = styled('div', {

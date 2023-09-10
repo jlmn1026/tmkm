@@ -18,4 +18,8 @@ const RootButton = styled('button', {
   padding: 0,
   appearance: 'none',
   cursor: 'pointer',
+
+  '&:hover': {
+    opacity: 0.75,
+  },
 });
