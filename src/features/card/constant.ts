@@ -6,4 +6,5 @@ export type InputCard = {
 export type StudyCard = {
   storeId: string;
   texts: string[];
+  createdAt: string;
 };

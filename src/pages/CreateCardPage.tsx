@@ -1,8 +1,8 @@
 import CommonContainer from '@/common-ui/CommonContainer';
 import HeadlessButton from '@/common-ui/HeadlessButton';
-import InputCardText from '@/features/create-card/InputCardText';
-import { addCard } from '@/features/create-card/cardStore';
-import { InputCard } from '@/features/create-card/constant';
+import InputCardText from '@/features/card/InputCardText';
+import { addCard } from '@/features/card/cardStore';
+import { InputCard } from '@/features/card/constant';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { styled } from '@stitches/react';
 import { Button, notification } from 'antd';
@@ -67,11 +67,20 @@ const CreateCardPage = () => {
           }}
           onClick={() => {
             try {
-              addCard(inputTexts);
+              addCard(inputTexts, new Date());
               notification.success({
                 message: 'new Card created!',
               });
-              setInputTexts(defaultTextCards);
+              setInputTexts([
+                {
+                  id: crypto.randomUUID(),
+                  text: '',
+                },
+                {
+                  id: crypto.randomUUID(),
+                  text: '',
+                },
+              ]);
             } catch (error) {
               console.log(error);
             }
