@@ -17,7 +17,6 @@ export default CommonContainer;
 
 const Content = styled('div', {
   marginTop: '12px',
-  padding: '4px',
   minWidth: '1024px',
   maxWidth: '1200px',
 });

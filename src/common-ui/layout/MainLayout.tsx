@@ -153,4 +153,5 @@ const HeaderTitle = styled('div', {
 
 const PageRoot = styled('div', {
   minWidth: '1024px',
+  padding: '12px',
 });
