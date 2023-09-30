@@ -1,6 +1,8 @@
 export const storageKeys = {
   cardMax: 'card-max',
   card: 'card-',
+  deckMax: 'deck-max',
+  deck: 'deck-',
 };
 
 export const getStorage = (key: string) => {

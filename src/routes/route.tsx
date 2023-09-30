@@ -6,6 +6,7 @@ import { Outlet, useRoutes } from 'react-router-dom';
 import { PageRoute } from './pageRoute';
 import CreateCardPage from '@/pages/CreateCardPage';
 import CardListPage from '@/pages/CardListPage';
+import CreateDeckPage from '@/pages/CreateDeckPage';
 
 const BaseLayout = () => {
   return (
@@ -35,7 +36,7 @@ export const AppRoutes = () => {
     {
       path: '/',
       element: <BaseLayout />,
-      children: [{ path: PageRoute.CreateDeck, element: <TopPage /> }],
+      children: [{ path: PageRoute.CreateDeck, element: <CreateDeckPage /> }],
     },
     {
       path: '/',
