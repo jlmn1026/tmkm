@@ -7,6 +7,7 @@ import { PageRoute } from './pageRoute';
 import CreateCardPage from '@/pages/CreateCardPage';
 import CardListPage from '@/pages/CardListPage';
 import CreateDeckPage from '@/pages/CreateDeckPage';
+import EditDeckPage from '@/pages/EditDeckPage';
 
 const BaseLayout = () => {
   return (
@@ -37,6 +38,11 @@ export const AppRoutes = () => {
       path: '/',
       element: <BaseLayout />,
       children: [{ path: PageRoute.CreateDeck, element: <CreateDeckPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: `${PageRoute.EditDeck}/:deckId`, element: <EditDeckPage /> }],
     },
     {
       path: '/',

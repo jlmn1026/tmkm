@@ -8,7 +8,7 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 const DeckButton = ({ children, ...props }: Props) => {
   return (
     <Button
-      {...props.onClick}
+      onClick={props.onClick}
       style={{
         width: '240px',
         overflow: 'hidden',

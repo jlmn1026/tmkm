@@ -2,12 +2,16 @@ import CommonContainer from '@/common-ui/CommonContainer';
 import { SubTitle } from '@/common-ui/Title';
 import DeckButton from '@/features/deck/DeckButton';
 import { addDeck, getAllDecks } from '@/features/deck/deckStore';
-import { styled } from '@/stitches.config';
+import { PageRoute } from '@/routes/pageRoute';
 import { Button, Input } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
+import { styled } from '@stitches/react';
 
 const CreateDeckPage = () => {
+  const navigate = useNavigate();
+
   const [deckName, setDeckName] = useState<string>();
   const [creating, setCreating] = useState<boolean>(false);
   const {
@@ -19,7 +23,7 @@ const CreateDeckPage = () => {
   });
 
   if (loading || !decks) {
-    return 'loading...';
+    return <>loading...</>;
   }
 
   return (
@@ -60,7 +64,12 @@ const CreateDeckPage = () => {
       <AllDecks>
         {decks.map((deck) => {
           return (
-            <DeckButton key={deck.storeId} onClick={() => {}}>
+            <DeckButton
+              key={deck.storeId}
+              onClick={() => {
+                navigate(`${PageRoute.EditDeck}/${deck.storeId}`);
+              }}
+            >
               {deck.name}
             </DeckButton>
           );
