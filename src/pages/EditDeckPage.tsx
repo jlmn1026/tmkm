@@ -1,50 +1,34 @@
 import CommonContainer from '@/common-ui/CommonContainer';
-import { SubTitle } from '@/common-ui/Title';
-import DeckButton from '@/features/deck/DeckButton';
-import { styled } from '@stitches/react';
+import { Tab, Tabs } from '@/common-ui/Tab';
+import CardSelect from '@/features/card/CardSelect';
+import DeckCardSelect from '@/features/deck/DeckCardSelect';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+type TabPage = 'card-select' | 'deck-cards';
+
 const EditDeckPage = () => {
-  const urlParams = useParams<{ deckId: string }>();
+  const { deckId } = useParams<{ deckId: string }>();
+  const [tabPage, setTabPage] = useState<TabPage>('deck-cards');
 
-  console.log(urlParams);
-
-  const cards = [
-    {
-      storeId: '1',
-      name: 'deck1',
-    },
-    {
-      storeId: '2',
-      name: 'deck2',
-    },
-    {
-      storeId: '3',
-      name: 'deck3',
-    },
-  ];
+  if (!deckId) {
+    return <></>;
+  }
 
   return (
     <CommonContainer>
-      <SubTitle>Card List</SubTitle>
-      <SubTitle>Input Card</SubTitle>
-      <AllCards>
-        {cards.map((deck) => {
-          return (
-            <DeckButton key={deck.storeId} onClick={() => {}}>
-              {deck.name}
-            </DeckButton>
-          );
-        })}
-      </AllCards>
+      <Tabs>
+        <Tab selected={tabPage === 'deck-cards'} onClick={() => setTabPage('deck-cards')}>
+          Deck Cards
+        </Tab>
+        <Tab selected={tabPage === 'card-select'} onClick={() => setTabPage('card-select')}>
+          Card Select
+        </Tab>
+      </Tabs>
+      {tabPage === 'deck-cards' && <DeckCardSelect deckId={deckId} />}
+      {tabPage === 'card-select' && <CardSelect deckId={deckId} />}
     </CommonContainer>
   );
 };
 
 export default EditDeckPage;
-
-const AllCards = styled('div', {
-  display: 'flex',
-  gap: '12px',
-  marginBottom: '80px',
-});
