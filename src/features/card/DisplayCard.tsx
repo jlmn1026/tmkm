@@ -47,19 +47,19 @@ const DisplayCard = ({ card }: Props) => {
 
 export default DisplayCard;
 
-const CardHeader = styled('div', {
+export const CardHeader = styled('div', {
   display: 'flex',
   gap: '12px',
 });
 
-const CardDate = styled('div', {
+export const CardDate = styled('div', {
   display: 'flex',
   alignItems: 'center',
   fontSize: '20px',
   marginRight: '20px',
 });
 
-const CardText = styled('div', {
+export const CardText = styled('div', {
   margin: '6px 0px',
   padding: '6px 0px',
   borderTop: '1px dashed #999',

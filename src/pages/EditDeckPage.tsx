@@ -1,15 +1,11 @@
 import CommonContainer from '@/common-ui/CommonContainer';
-import { Tab, Tabs } from '@/common-ui/Tab';
-import CardSelect from '@/features/card/CardSelect';
+import CardSelectForDeck from '@/features/card/CardSelectForDeck';
 import DeckCardSelect from '@/features/deck/DeckCardSelect';
-import { useState } from 'react';
+import { styled } from '@stitches/react';
 import { useParams } from 'react-router-dom';
-
-type TabPage = 'card-select' | 'deck-cards';
 
 const EditDeckPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
-  const [tabPage, setTabPage] = useState<TabPage>('deck-cards');
 
   if (!deckId) {
     return <></>;
@@ -17,18 +13,18 @@ const EditDeckPage = () => {
 
   return (
     <CommonContainer>
-      <Tabs>
-        <Tab selected={tabPage === 'deck-cards'} onClick={() => setTabPage('deck-cards')}>
-          Deck Cards
-        </Tab>
-        <Tab selected={tabPage === 'card-select'} onClick={() => setTabPage('card-select')}>
-          Card Select
-        </Tab>
-      </Tabs>
-      {tabPage === 'deck-cards' && <DeckCardSelect deckId={deckId} />}
-      {tabPage === 'card-select' && <CardSelect deckId={deckId} />}
+      <Container>
+        <DeckCardSelect deckId={deckId} />
+        <CardSelectForDeck deckId={deckId} />
+      </Container>
     </CommonContainer>
   );
 };
 
 export default EditDeckPage;
+
+const Container = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  width: '100%',
+});

@@ -1,22 +1,23 @@
-import { useAsync } from 'react-use';
-import { getAllCards } from '../card/cardStore';
-import { useState } from 'react';
-import SelectCard from '../card/SelectCard';
 import { styled } from '@stitches/react';
-import { StudyCard } from '../card/constant';
+import { useAsync } from 'react-use';
+import { StudyCard } from './constant';
+import { useState } from 'react';
+import { getAllCards } from './cardStore';
+import SelectCard from './SelectCard';
 
 type Props = {
   deckId: string;
 };
 
-const DeckCardSelect = ({ deckId }: Props) => {
+const CardSelectForDeck = ({ deckId }: Props) => {
   const [cards, setCards] = useState<StudyCard[]>([]);
   useAsync(async () => {
     setCards(getAllCards());
   });
+
   return (
     <Container>
-      <Title>Deck Cards</Title>
+      <Title>All Cards</Title>
       <AllCards>
         {cards.map((card) => {
           return <SelectCard key={card.storeId} card={card} onSelect={() => {}} />;
@@ -26,7 +27,7 @@ const DeckCardSelect = ({ deckId }: Props) => {
   );
 };
 
-export default DeckCardSelect;
+export default CardSelectForDeck;
 
 const Title = styled('div', {
   display: 'flex',
@@ -45,8 +46,7 @@ const AllCards = styled('div', {
 });
 
 const Container = styled('div', {
-  width: '45%',
-
   display: 'flex',
   flexDirection: 'column',
+  width: '45%',
 });
