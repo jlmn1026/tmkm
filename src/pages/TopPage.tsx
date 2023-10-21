@@ -1,27 +1,51 @@
 import CommonContainer from '@/common-ui/CommonContainer';
 import { SubTitle } from '@/common-ui/Title';
+import { AllDeckContainer } from '@/features/deck/AllDeckContainer';
+import DeckButton from '@/features/deck/DeckButton';
+import { StudyDeck } from '@/features/deck/constant';
+import { getAllDecks } from '@/features/deck/deckStore';
+import { PageRoute } from '@/routes/pageRoute';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 const TopPage = () => {
-  const [favoriteDecks, setFavoriteDecks] = useState<any[]>([]);
-  const [recentUsedDecks, setRecentUsedDecks] = useState<any[]>([]);
+  const [favoriteDecks, setFavoriteDecks] = useState<StudyDeck[]>([]);
+  const [recentUsedDecks, setRecentUsedDecks] = useState<StudyDeck[]>([]);
+  const [allDecks, setAllDecks] = useState<StudyDeck[]>([]);
 
   useAsync(async () => {
+    const allDecks = getAllDecks();
     setFavoriteDecks([]);
     setRecentUsedDecks([]);
+    setAllDecks(allDecks);
   });
 
   return (
     <CommonContainer>
       <SubTitle>Favorite Decks</SubTitle>
-      {favoriteDecks.map((item) => {
-        return item;
-      })}
+      <AllDeckContainer>
+        {favoriteDecks.map((deck) => {
+          return <DeckButton key={deck.storeId}>{deck.name}</DeckButton>;
+        })}
+      </AllDeckContainer>
       <SubTitle>Recent Used Decks</SubTitle>
-      {recentUsedDecks.map((item) => {
-        return item;
-      })}
+      <AllDeckContainer>
+        {recentUsedDecks.map((deck) => {
+          return <DeckButton key={deck.storeId}>{deck.name}</DeckButton>;
+        })}
+      </AllDeckContainer>
+
+      <SubTitle>All Decks</SubTitle>
+      <AllDeckContainer>
+        {allDecks.map((deck) => {
+          return (
+            <Link key={deck.storeId} to={`${PageRoute.Study}/${deck.storeId}`}>
+              <DeckButton>{deck.name}</DeckButton>
+            </Link>
+          );
+        })}
+      </AllDeckContainer>
     </CommonContainer>
   );
 };

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
 import { styled } from '@stitches/react';
+import { AllDeckContainer } from '@/features/deck/AllDeckContainer';
 
 const CreateDeckPage = () => {
   const navigate = useNavigate();
@@ -42,7 +43,6 @@ const CreateDeckPage = () => {
           style={{ width: '15%' }}
           loading={creating}
           onClick={() => {
-            console.log(deckName);
             if (!deckName) {
               notification.error({ message: 'Deck name is empty' });
               return;
@@ -63,7 +63,7 @@ const CreateDeckPage = () => {
         </Button>
       </CreateDeck>
       <SubTitle>Select Deck</SubTitle>
-      <AllDecks>
+      <AllDeckContainer>
         {decks.map((deck) => {
           return (
             <DeckButton
@@ -76,7 +76,7 @@ const CreateDeckPage = () => {
             </DeckButton>
           );
         })}
-      </AllDecks>
+      </AllDeckContainer>
     </CommonContainer>
   );
 };
@@ -87,12 +87,4 @@ const CreateDeck = styled('div', {
   display: 'flex',
   gap: '12px',
   margin: '12px 0px 36px 0px',
-});
-
-const AllDecks = styled('div', {
-  margin: '12px 0px',
-  display: 'flex',
-  gap: '12px',
-  flexWrap: 'wrap',
-  wdth: '1024px',
 });
