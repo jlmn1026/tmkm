@@ -1,11 +1,11 @@
 import { Centerized } from '@/common-ui/Centerized';
 import CommonContainer from '@/common-ui/CommonContainer';
-import { getCardsByIds, setCardGoalCount, storeCardGoalCount } from '@/features/card/cardStore';
+import { getCardsByIds } from '@/features/card/cardStore';
 import { StudyCard } from '@/features/card/constant';
 import { getDeck } from '@/features/deck/deckStore';
+import StudyCardDetail from '@/features/study/StudyCardDetail';
 import { styled } from '@stitches/react';
 import { Button, notification } from 'antd';
-import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
@@ -18,7 +18,6 @@ const StudyPage = () => {
   const [initCards, setInitCards] = useState<boolean>(false);
   const [cardDisplayKey, setCardDisplayKey] = useState<number>(0);
   const [textDisplayKey, setTextDisplayKey] = useState<number>(0);
-  const [displayGoalCount, setDisplayGoalCount] = useState<number | undefined>();
 
   useAsync(async () => {
     if (!deckId) {
@@ -34,58 +33,25 @@ const StudyPage = () => {
       clearTimeout(timerID);
       timerID = setTimeout(() => notification.error({ message: 'Deck is empty' }), 200);
     }
-
-    setDisplayGoalCount(cards[0].goalCount ?? 10);
   }, [deckId]);
-
-  const refreshDisplay = useCallback(
-    (cardKey: number) => {
-      setDisplayGoalCount(deckCards[cardKey].goalCount ?? 10);
-    },
-    [deckCards]
-  );
 
   const beforeCard = useCallback(() => {
     if (textDisplayKey === 0) {
       setCardDisplayKey(cardDisplayKey - 1);
       setTextDisplayKey(deckCards[cardDisplayKey - 1].texts.length - 1);
-      refreshDisplay(cardDisplayKey - 1);
     } else {
       setTextDisplayKey(textDisplayKey - 1);
     }
-  }, [cardDisplayKey, deckCards, refreshDisplay, textDisplayKey]);
+  }, [cardDisplayKey, deckCards, textDisplayKey]);
 
   const nextCard = useCallback(() => {
     if (textDisplayKey === deckCards[cardDisplayKey].texts.length - 1) {
       setCardDisplayKey(cardDisplayKey + 1);
       setTextDisplayKey(0);
-      refreshDisplay(cardDisplayKey + 1);
     } else {
       setTextDisplayKey(textDisplayKey + 1);
     }
-  }, [cardDisplayKey, deckCards, refreshDisplay, textDisplayKey]);
-
-  const changeGoalCount = useCallback(
-    (count: number) => {
-      setDisplayGoalCount((current) => {
-        const updateCount = (current ?? 10) + count;
-        storeCardGoalCount(deckCards[cardDisplayKey].storeId, updateCount);
-        setDeckCards(
-          deckCards.map((item, index) => {
-            if (index !== cardDisplayKey) {
-              return item;
-            }
-            return {
-              ...item,
-              goalCount: updateCount,
-            };
-          })
-        );
-        return updateCount;
-      });
-    },
-    [cardDisplayKey, deckCards]
-  );
+  }, [cardDisplayKey, deckCards, textDisplayKey]);
 
   if (initCards && deckCards.length === 0) {
     return <Navigate to="/" />;
@@ -99,8 +65,6 @@ const StudyPage = () => {
     );
   }
 
-  console.log(cardDisplayKey, displayGoalCount);
-
   const firstCardText = textDisplayKey === 0 && cardDisplayKey === 0;
   const lastCardText =
     textDisplayKey === deckCards[cardDisplayKey].texts.length - 1 &&
@@ -108,39 +72,36 @@ const StudyPage = () => {
 
   return (
     <CommonContainer>
-      <CardInfo>
-        <div>
-          CardNo: {cardDisplayKey + 1}/{deckCards.length}
-        </div>
-        <div>
-          Registered Date: {format(new Date(deckCards[cardDisplayKey].createdAt), 'yyyy/MM/dd')}
-        </div>
-        <div>UesedCount: {deckCards[cardDisplayKey].usedCount ?? 0}</div>
-        <GoalCount>
-          GoalCount:{' '}
-          <Button
-            onClick={() => {
-              changeGoalCount(-1);
-            }}
-          >
-            -
-          </Button>
-          {displayGoalCount}
-          <Button
-            onClick={() => {
-              changeGoalCount(+1);
-            }}
-          >
-            +
-          </Button>
-        </GoalCount>
-      </CardInfo>
-      <StudyCardView>{deckCards[cardDisplayKey].texts[textDisplayKey]}</StudyCardView>
+      {deckCards.map((card, index) => {
+        return (
+          <>
+            <StudyCardDetail
+              card={card}
+              show={index === cardDisplayKey}
+              deckLength={deckCards.length}
+              cardNumber={cardDisplayKey + 1}
+            />
+            {index === cardDisplayKey && (
+              <StudyCardView key={card.storeId}>
+                {card.texts.map((text, index) => {
+                  if (index !== textDisplayKey) {
+                    return <></>;
+                  }
+                  return text;
+                })}
+              </StudyCardView>
+            )}
+          </>
+        );
+      })}
       <ButtonContainer>
         <ButtonGroup>
           <Button type="primary" disabled={firstCardText} onClick={beforeCard}>
             Prev
           </Button>
+          {/* <Button type="primary" disabled={firstCardText} onClick={finishStudy}>
+            Finish
+          </Button> */}
           <Button type="primary" disabled={lastCardText} onClick={nextCard}>
             Next
           </Button>
@@ -171,19 +132,4 @@ const ButtonGroup = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
   width: '600px',
-});
-
-const CardInfo = styled('div', {
-  width: '1024px',
-  paddingBottom: '4px',
-  borderBottom: '1px solid #fff',
-  display: 'flex',
-  justifyContent: 'space-evenly',
-  alignItems: 'center',
-});
-
-const GoalCount = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
 });
