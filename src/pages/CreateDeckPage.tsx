@@ -3,7 +3,7 @@ import { SubTitle } from '@/common-ui/Title';
 import DeckButton from '@/features/deck/DeckButton';
 import { addDeck, getAllDecks } from '@/features/deck/deckStore';
 import { PageRoute } from '@/routes/pageRoute';
-import { Button, Input } from 'antd';
+import { Button, Input, notification } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
@@ -32,33 +32,35 @@ const CreateDeckPage = () => {
       <CreateDeck>
         <Input
           placeholder="input deck name"
-          style={{ width: '80%' }}
+          style={{ width: '850px' }}
+          value={deckName}
           onChange={(e) => {
             setDeckName(e.target.value);
           }}
         />
-        {deckName && (
-          <Button
-            style={{ width: '15%' }}
-            loading={creating}
-            onClick={() => {
-              if (!deckName) {
-                return;
-              }
-              try {
-                setCreating(true);
-                addDeck(deckName, new Date());
-                retry();
-              } catch (error) {
-                console.error(error);
-              } finally {
-                setCreating(false);
-              }
-            }}
-          >
-            Create Deck
-          </Button>
-        )}
+        <Button
+          style={{ width: '15%' }}
+          loading={creating}
+          onClick={() => {
+            console.log(deckName);
+            if (!deckName) {
+              notification.error({ message: 'Deck name is empty' });
+              return;
+            }
+            try {
+              setCreating(true);
+              addDeck(deckName, new Date());
+              setDeckName('');
+              retry();
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setCreating(false);
+            }
+          }}
+        >
+          Create Deck
+        </Button>
       </CreateDeck>
       <SubTitle>Select Deck</SubTitle>
       <AllDecks>
@@ -84,11 +86,13 @@ export default CreateDeckPage;
 const CreateDeck = styled('div', {
   display: 'flex',
   gap: '12px',
-  marginBottom: '80px',
+  margin: '12px 0px 36px 0px',
 });
 
 const AllDecks = styled('div', {
+  margin: '12px 0px',
   display: 'flex',
   gap: '12px',
   flexWrap: 'wrap',
+  wdth: '1024px',
 });

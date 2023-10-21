@@ -10,7 +10,7 @@ const DeckButton = ({ children, ...props }: Props) => {
     <Button
       onClick={props.onClick}
       style={{
-        width: '240px',
+        width: '200px',
         overflow: 'hidden',
       }}
     >

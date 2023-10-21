@@ -16,18 +16,20 @@ const DisplayCard = ({ card }: Props) => {
       title={
         <CardHeader>
           <CardDate>{format(new Date(card.createdAt), 'yyyy/MM/dd')}</CardDate>
-          <Button
-            type="primary"
-            style={{ width: '75px' }}
-            onClick={() => {
-              setShowMore(!showMore);
-            }}
-          >
-            {showMore ? 'Hide' : 'More'}
-          </Button>
-          <Button type="primary" danger>
-            Delete
-          </Button>
+          <ButtonContainer>
+            <Button
+              type="primary"
+              style={{ width: '75px' }}
+              onClick={() => {
+                setShowMore(!showMore);
+              }}
+            >
+              {showMore ? 'Hide' : 'More'}
+            </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </ButtonContainer>
         </CardHeader>
       }
       key={card.storeId}
@@ -49,6 +51,7 @@ export default DisplayCard;
 
 export const CardHeader = styled('div', {
   display: 'flex',
+  justifyContent: 'space-between',
   gap: '12px',
 });
 
@@ -63,4 +66,9 @@ export const CardText = styled('div', {
   margin: '6px 0px',
   padding: '6px 0px',
   borderTop: '1px dashed #999',
+});
+
+const ButtonContainer = styled('div', {
+  display: 'flex',
+  gap: '12px',
 });

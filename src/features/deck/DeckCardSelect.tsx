@@ -4,6 +4,7 @@ import { useState } from 'react';
 import SelectCard from '../card/SelectCard';
 import { styled } from '@stitches/react';
 import { StudyCard } from '../card/constant';
+import { AllCards } from '../card/CardSelectForDeck';
 
 type Props = {
   deckId: string;
@@ -32,16 +33,6 @@ const Title = styled('div', {
   display: 'flex',
   justifyContent: 'center',
   paddingBottom: '12px',
-});
-
-const AllCards = styled('div', {
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '12px',
-  marginBottom: '80px',
-  flexWrap: 'wrap',
-  height: '100%',
-  overflowY: 'scroll',
 });
 
 const Container = styled('div', {

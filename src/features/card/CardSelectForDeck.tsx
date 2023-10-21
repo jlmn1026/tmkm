@@ -29,20 +29,20 @@ const CardSelectForDeck = ({ deckId }: Props) => {
 
 export default CardSelectForDeck;
 
-const Title = styled('div', {
-  display: 'flex',
-  justifyContent: 'center',
-  paddingBottom: '12px',
-});
-
-const AllCards = styled('div', {
+export const AllCards = styled('div', {
   display: 'flex',
   justifyContent: 'center',
   gap: '12px',
   marginBottom: '80px',
   flexWrap: 'wrap',
-  height: '100%',
+  height: 'calc(100vh - 120px)',
   overflowY: 'scroll',
+});
+
+const Title = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+  paddingBottom: '12px',
 });
 
 const Container = styled('div', {
