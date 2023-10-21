@@ -44,3 +44,47 @@ export const getAllDecks = (offset = 0, limit = 50): StudyDeck[] => {
 
   return results;
 };
+
+export const getDeck = (deckId: string): StudyDeck => {
+  const deck = getStorage(`${storageKeys.deck}${deckId}`);
+
+  if (!deck) {
+    throw new Error('Deck not found');
+  }
+
+  return JSON.parse(deck);
+};
+
+export const addCardToDeck = (deckId: string, cardId: string) => {
+  const deck = getStorage(`${storageKeys.deck}${deckId}`);
+  if (!deck) {
+    notification.error({
+      message: 'Deck not found',
+    });
+    throw new Error('Deck not found');
+  }
+
+  const deckObj = JSON.parse(deck);
+
+  if (deckObj.cards.includes(cardId)) {
+    return;
+  }
+
+  deckObj.cards.push(cardId);
+  setStorage(`${storageKeys.deck}${deckId}`, deckObj);
+};
+
+export const removeCardFromDeck = (deckId: string, cardId: string) => {
+  const deck = getStorage(`${storageKeys.deck}${deckId}`);
+  if (!deck) {
+    notification.error({
+      message: 'Deck not found',
+    });
+    throw new Error('Deck not found');
+  }
+
+  const deckObj = JSON.parse(deck);
+
+  deckObj.cards = deckObj.cards.filter((id: string) => id !== cardId);
+  setStorage(`${storageKeys.deck}${deckId}`, deckObj);
+};

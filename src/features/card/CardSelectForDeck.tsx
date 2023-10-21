@@ -4,12 +4,14 @@ import { StudyCard } from './constant';
 import { useState } from 'react';
 import { getAllCards } from './cardStore';
 import SelectCard from './SelectCard';
+import { addCardToDeck } from '../deck/deckStore';
 
 type Props = {
   deckId: string;
+  onSelected: () => void;
 };
 
-const CardSelectForDeck = ({ deckId }: Props) => {
+const CardSelectForDeck = ({ deckId, onSelected }: Props) => {
   const [cards, setCards] = useState<StudyCard[]>([]);
   useAsync(async () => {
     setCards(getAllCards());
@@ -20,7 +22,16 @@ const CardSelectForDeck = ({ deckId }: Props) => {
       <Title>All Cards</Title>
       <AllCards>
         {cards.map((card) => {
-          return <SelectCard key={card.storeId} card={card} onSelect={() => {}} />;
+          return (
+            <SelectCard
+              key={card.storeId}
+              card={card}
+              onSelect={() => {
+                addCardToDeck(deckId, card.storeId);
+                onSelected();
+              }}
+            />
+          );
         })}
       </AllCards>
     </Container>
@@ -35,7 +46,7 @@ export const AllCards = styled('div', {
   gap: '12px',
   marginBottom: '80px',
   flexWrap: 'wrap',
-  height: 'calc(100vh - 120px)',
+  height: 'calc(100vh - 200px)',
   overflowY: 'scroll',
 });
 

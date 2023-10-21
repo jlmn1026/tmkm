@@ -49,3 +49,15 @@ export const getAllCards = (offset = 0, limit = 50): StudyCard[] => {
 
   return results;
 };
+
+export const getCardsByIds = (cardIds: string[]): StudyCard[] => {
+  const cards = [];
+  for (const cardId of cardIds) {
+    const card = getStorage(`${storageKeys.card}${cardId}`);
+    if (!card) continue;
+
+    cards.push(JSON.parse(card));
+  }
+
+  return cards;
+};

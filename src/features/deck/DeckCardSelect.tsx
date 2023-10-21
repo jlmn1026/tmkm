@@ -1,26 +1,31 @@
-import { useAsync } from 'react-use';
-import { getAllCards } from '../card/cardStore';
-import { useState } from 'react';
 import SelectCard from '../card/SelectCard';
 import { styled } from '@stitches/react';
 import { StudyCard } from '../card/constant';
 import { AllCards } from '../card/CardSelectForDeck';
+import { removeCardFromDeck } from './deckStore';
 
 type Props = {
   deckId: string;
+  deckCards: StudyCard[];
+  onUnSelected: () => void;
 };
 
-const DeckCardSelect = ({ deckId }: Props) => {
-  const [cards, setCards] = useState<StudyCard[]>([]);
-  useAsync(async () => {
-    setCards(getAllCards());
-  });
+const DeckCardSelect = ({ deckId, deckCards, onUnSelected }: Props) => {
   return (
     <Container>
       <Title>Deck Cards</Title>
       <AllCards>
-        {cards.map((card) => {
-          return <SelectCard key={card.storeId} card={card} onSelect={() => {}} />;
+        {deckCards.map((card) => {
+          return (
+            <SelectCard
+              key={card.storeId}
+              card={card}
+              onUnSelect={() => {
+                removeCardFromDeck(deckId, card.storeId);
+                onUnSelected();
+              }}
+            />
+          );
         })}
       </AllCards>
     </Container>
