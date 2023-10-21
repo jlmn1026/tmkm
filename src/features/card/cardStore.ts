@@ -61,3 +61,18 @@ export const getCardsByIds = (cardIds: string[]): StudyCard[] => {
 
   return cards;
 };
+
+export const storeCardGoalCount = (cardId: string, goalCount: number) => {
+  const card = getStorage(`${storageKeys.card}${cardId}`);
+  if (!card) {
+    notification.error({
+      message: 'Card not found',
+    });
+    throw new Error('Card not found');
+  }
+
+  setStorage(`${storageKeys.card}${cardId}`, {
+    ...JSON.parse(card),
+    goalCount,
+  });
+};
