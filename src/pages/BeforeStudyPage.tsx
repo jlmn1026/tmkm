@@ -12,6 +12,12 @@ const BeforeStudyPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
   const [deck, setDeck] = useState<StudyDeck>();
 
+  const [usedType, setUsedType] = useState<'all' | 'infrequently' | 'belowGoalCount'>(
+    'belowGoalCount'
+  );
+
+  const [useNum, setUseNum] = useState<number>(10);
+
   useAsync(async () => {
     if (!deckId) {
       return;
@@ -27,18 +33,45 @@ const BeforeStudyPage = () => {
     <CommonContainer>
       <SubTitle>Select the type of card for your study</SubTitle>
       <SelectNumberRow>
-        <Button type="primary">All Card</Button>
-        <Button type="primary">Used infrequently</Button>
-        <Button type="primary">Below goal count</Button>
+        <Button
+          type={usedType === 'all' ? 'primary' : 'default'}
+          onClick={() => setUsedType('all')}
+        >
+          All Card
+        </Button>
+        <Button
+          type={usedType === 'infrequently' ? 'primary' : 'default'}
+          onClick={() => setUsedType('infrequently')}
+        >
+          Used infrequently
+        </Button>
+        <Button
+          type={usedType === 'belowGoalCount' ? 'primary' : 'default'}
+          onClick={() => setUsedType('belowGoalCount')}
+        >
+          Below goal count
+        </Button>
       </SelectNumberRow>
       <SubTitle>Select use Number of cards</SubTitle>
       <SelectNumberRow>
-        <Button type="primary">10</Button>
-        <Button type="default">20</Button>
-        <Button type="primary">30</Button>
-        <Button type="primary">40</Button>
-        <Button type="primary">50</Button>
+        {Array.from({ length: 5 }).map((_, index) => {
+          const num = (index + 1) * 10;
+          return (
+            <Button
+              key={num}
+              onClick={() => setUseNum(num)}
+              type={useNum === num ? 'primary' : 'default'}
+            >
+              {num}
+            </Button>
+          );
+        })}
       </SelectNumberRow>
+      <StartButtonRow>
+        <Button type="primary" onClick={() => {}}>
+          Study Start
+        </Button>
+      </StartButtonRow>
     </CommonContainer>
   );
 };
@@ -49,4 +82,8 @@ const SelectNumberRow = styled('div', {
   display: 'flex',
   gap: '12px',
   margin: '24px 0px',
+});
+
+const StartButtonRow = styled('div', {
+  marginTop: '48px',
 });

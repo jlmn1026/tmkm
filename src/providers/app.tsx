@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { HashRouter as Router } from 'react-router-dom';
-
+import { Provider as JotaiProvider } from 'jotai';
 import { Button, Spin } from 'antd';
 
 const ErrorFallback = () => {
@@ -30,8 +30,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     >
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <HelmetProvider>
-          {/* TODO: jotai */}
-          <Router>{children}</Router>
+          <JotaiProvider>
+            <Router>{children}</Router>
+          </JotaiProvider>
         </HelmetProvider>
       </ErrorBoundary>
     </React.Suspense>
