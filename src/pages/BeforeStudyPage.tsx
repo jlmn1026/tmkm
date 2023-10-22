@@ -2,20 +2,21 @@ import CommonContainer from '@/common-ui/CommonContainer';
 import { SubTitle } from '@/common-ui/Title';
 import { StudyDeck } from '@/features/deck/constant';
 import { getDeck } from '@/features/deck/deckStore';
+import { StudyType, studyModeAtom } from '@/jotai/study';
 import { styled } from '@stitches/react';
 import { Button } from 'antd';
-import { useState } from 'react';
+import { useAtom } from 'jotai';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 const BeforeStudyPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
+
+  const [, setStudyMode] = useAtom(studyModeAtom);
+
   const [deck, setDeck] = useState<StudyDeck>();
-
-  const [usedType, setUsedType] = useState<'all' | 'infrequently' | 'belowGoalCount'>(
-    'belowGoalCount'
-  );
-
+  const [usedType, setUsedType] = useState<StudyType>('belowGoalCount');
   const [useNum, setUseNum] = useState<number>(10);
 
   useAsync(async () => {
@@ -24,6 +25,13 @@ const BeforeStudyPage = () => {
     }
     setDeck(getDeck(deckId));
   });
+
+  const startStudy = useCallback(() => {
+    setStudyMode({
+      cardNum: useNum,
+      cardType: usedType,
+    });
+  }, [setStudyMode, useNum, usedType]);
 
   if (!deck) {
     return <>Loading...</>;
@@ -68,7 +76,7 @@ const BeforeStudyPage = () => {
         })}
       </SelectNumberRow>
       <StartButtonRow>
-        <Button type="primary" onClick={() => {}}>
+        <Button type="primary" onClick={startStudy}>
           Study Start
         </Button>
       </StartButtonRow>
