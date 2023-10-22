@@ -44,7 +44,7 @@ const TopPage = () => {
       <AllDeckContainer>
         {allDecks.map((deck) => {
           return (
-            <Link key={deck.storeId} to={`${PageRoute.Study}/${deck.storeId}`}>
+            <Link key={deck.storeId} to={`${PageRoute.BeforeStudy}/${deck.storeId}`}>
               <DeckButton>{deck.name}</DeckButton>
             </Link>
           );

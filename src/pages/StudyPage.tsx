@@ -4,8 +4,10 @@ import { finishStudyCards, getCardsByIds } from '@/features/card/cardStore';
 import { StudyCard } from '@/features/card/constant';
 import { getDeck, updateRecentUsedDeck } from '@/features/deck/deckStore';
 import StudyCardDetail from '@/features/study/StudyCardDetail';
+import { studyModeAtom } from '@/jotai/study';
 import { styled } from '@stitches/react';
 import { Button, notification } from 'antd';
+import { useAtom } from 'jotai';
 import { useCallback, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
@@ -14,6 +16,7 @@ let timerID: NodeJS.Timeout;
 
 const StudyPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
+  const [studyMode] = useAtom(studyModeAtom);
   const navigate = useNavigate();
 
   const [deckCards, setDeckCards] = useState<StudyCard[]>([]);
@@ -28,15 +31,31 @@ const StudyPage = () => {
       return;
     }
     const deck = getDeck(deckId);
-    const cards = getCardsByIds(deck.cards).sort(() => Math.random() - 0.5);
-    // randomize
-    setDeckCards(cards);
-    setInitCards(true);
+    const orgCards = getCardsByIds(deck.cards);
 
-    if (cards.length === 0) {
+    const filterdCards = (() => {
+      if (studyMode.cardType === 'all') {
+        return orgCards;
+      }
+
+      if (studyMode.cardType === 'infrequently') {
+        return orgCards.sort((a, b) => (a.usedCount ?? 0) - (b.usedCount ?? 0));
+      }
+
+      // belowGoalCount
+      return orgCards.filter((card) => (card.usedCount ?? 0) < (card.goalCount ?? 10));
+    })();
+
+    if (filterdCards.length === 0) {
       clearTimeout(timerID);
       timerID = setTimeout(() => notification.error({ message: 'Deck is empty' }), 200);
     }
+
+    const randomizedCards = filterdCards.sort(() => Math.random() - 0.5);
+
+    // randomize
+    setDeckCards(randomizedCards);
+    setInitCards(true);
   }, [deckId]);
 
   const beforeCard = useCallback(() => {

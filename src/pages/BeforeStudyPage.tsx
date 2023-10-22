@@ -3,15 +3,17 @@ import { SubTitle } from '@/common-ui/Title';
 import { StudyDeck } from '@/features/deck/constant';
 import { getDeck } from '@/features/deck/deckStore';
 import { StudyType, studyModeAtom } from '@/jotai/study';
+import { PageRoute } from '@/routes/pageRoute';
 import { styled } from '@stitches/react';
 import { Button } from 'antd';
 import { useAtom } from 'jotai';
 import { useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 const BeforeStudyPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
+  const navigate = useNavigate();
 
   const [, setStudyMode] = useAtom(studyModeAtom);
 
@@ -31,7 +33,9 @@ const BeforeStudyPage = () => {
       cardNum: useNum,
       cardType: usedType,
     });
-  }, [setStudyMode, useNum, usedType]);
+
+    navigate(`${PageRoute.Study}/${deckId}`);
+  }, [deckId, navigate, setStudyMode, useNum, usedType]);
 
   if (!deck) {
     return <>Loading...</>;
