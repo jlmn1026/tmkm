@@ -1,23 +1,27 @@
 import { Centerized } from '@/common-ui/Centerized';
 import CommonContainer from '@/common-ui/CommonContainer';
-import { getCardsByIds } from '@/features/card/cardStore';
+import { finishStudyCards, getCardsByIds } from '@/features/card/cardStore';
 import { StudyCard } from '@/features/card/constant';
 import { getDeck } from '@/features/deck/deckStore';
 import StudyCardDetail from '@/features/study/StudyCardDetail';
 import { styled } from '@stitches/react';
 import { Button, notification } from 'antd';
 import { useCallback, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 let timerID: NodeJS.Timeout;
 
 const StudyPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
+  const navigate = useNavigate();
+
   const [deckCards, setDeckCards] = useState<StudyCard[]>([]);
   const [initCards, setInitCards] = useState<boolean>(false);
   const [cardDisplayKey, setCardDisplayKey] = useState<number>(0);
   const [textDisplayKey, setTextDisplayKey] = useState<number>(0);
+
+  const [finishLoading, setFinishLoading] = useState<boolean>(false);
 
   useAsync(async () => {
     if (!deckId) {
@@ -53,6 +57,22 @@ const StudyPage = () => {
     }
   }, [cardDisplayKey, deckCards, textDisplayKey]);
 
+  const finishStudy = useCallback(() => {
+    setFinishLoading(true);
+    clearTimeout(timerID);
+    timerID = setTimeout(() => {
+      try {
+        finishStudyCards(deckCards.map((card) => card.storeId));
+        notification.success({ message: 'Study Finished' });
+        navigate('/');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setFinishLoading(false);
+      }
+    }, 400);
+  }, [deckCards, navigate]);
+
   if (initCards && deckCards.length === 0) {
     return <Navigate to="/" />;
   }
@@ -81,7 +101,8 @@ const StudyPage = () => {
               deckLength={deckCards.length}
               cardNumber={cardDisplayKey + 1}
             />
-            {index === cardDisplayKey && (
+            {finishLoading && <Centerized>Loading...</Centerized>}
+            {!finishLoading && index === cardDisplayKey && (
               <StudyCardView key={card.storeId}>
                 {card.texts.map((text, index) => {
                   if (index !== textDisplayKey) {
@@ -99,9 +120,9 @@ const StudyPage = () => {
           <Button type="primary" disabled={firstCardText} onClick={beforeCard}>
             Prev
           </Button>
-          {/* <Button type="primary" disabled={firstCardText} onClick={finishStudy}>
+          <Button type="primary" onClick={finishStudy}>
             Finish
-          </Button> */}
+          </Button>
           <Button type="primary" disabled={lastCardText} onClick={nextCard}>
             Next
           </Button>
