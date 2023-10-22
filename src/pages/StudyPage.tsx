@@ -98,7 +98,7 @@ const StudyPage = () => {
     <CommonContainer>
       {deckCards.map((card, index) => {
         return (
-          <>
+          <div key={card.storeId}>
             <StudyCardDetail
               card={card}
               show={index === cardDisplayKey}
@@ -116,7 +116,7 @@ const StudyPage = () => {
                 })}
               </StudyCardView>
             )}
-          </>
+          </div>
         );
       })}
       <ButtonContainer>

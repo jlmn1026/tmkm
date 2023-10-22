@@ -9,6 +9,7 @@ import CardListPage from '@/pages/CardListPage';
 import CreateDeckPage from '@/pages/CreateDeckPage';
 import EditDeckPage from '@/pages/EditDeckPage';
 import StudyPage from '@/pages/StudyPage';
+import BeforeStudyPage from '@/pages/BeforeStudyPage';
 
 const BaseLayout = () => {
   return (
@@ -60,6 +61,11 @@ export const AppRoutes = () => {
       element: <BaseLayout />,
       // TODO: top pageという名前はやめる
       children: [{ path: PageRoute.Study, element: <TopPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: `${PageRoute.BeforeStudy}/:deckId`, element: <BeforeStudyPage /> }],
     },
     {
       path: '/',

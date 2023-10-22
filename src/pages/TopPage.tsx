@@ -32,7 +32,11 @@ const TopPage = () => {
       <SubTitle>Recent Used Decks</SubTitle>
       <AllDeckContainer>
         {recentUsedDecks.map((deck) => {
-          return <DeckButton key={deck.storeId}>{deck.name}</DeckButton>;
+          return (
+            <Link key={deck.storeId} to={`${PageRoute.Study}/${deck.storeId}`}>
+              <DeckButton>{deck.name}</DeckButton>
+            </Link>
+          );
         })}
       </AllDeckContainer>
 
