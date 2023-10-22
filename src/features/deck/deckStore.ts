@@ -88,3 +88,29 @@ export const removeCardFromDeck = (deckId: string, cardId: string) => {
   deckObj.cards = deckObj.cards.filter((id: string) => id !== cardId);
   setStorage(`${storageKeys.deck}${deckId}`, deckObj);
 };
+
+export const getRecentUsedDeck = (): StudyDeck[] => {
+  const storedRecentDeck = getStorage(`${storageKeys.recentUsedDeck}`);
+
+  if (!storedRecentDeck) {
+    return [];
+  }
+
+  const recentDeck = JSON.parse(storedRecentDeck) as string[];
+
+  return recentDeck.map((deckId) => getDeck(deckId));
+};
+
+export const updateRecentUsedDeck = (deckId: string) => {
+  const storedRecentDeck = getStorage(`${storageKeys.recentUsedDeck}`);
+
+  const recentDeck = (() => {
+    if (!storedRecentDeck) {
+      return [];
+    }
+    return JSON.parse(storedRecentDeck) as string[];
+  })();
+
+  recentDeck.push(deckId);
+  setStorage(`${storageKeys.recentUsedDeck}`, Array.from(new Set(recentDeck)).splice(0, 5));
+};

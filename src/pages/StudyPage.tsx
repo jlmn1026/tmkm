@@ -2,7 +2,7 @@ import { Centerized } from '@/common-ui/Centerized';
 import CommonContainer from '@/common-ui/CommonContainer';
 import { finishStudyCards, getCardsByIds } from '@/features/card/cardStore';
 import { StudyCard } from '@/features/card/constant';
-import { getDeck } from '@/features/deck/deckStore';
+import { getDeck, updateRecentUsedDeck } from '@/features/deck/deckStore';
 import StudyCardDetail from '@/features/study/StudyCardDetail';
 import { styled } from '@stitches/react';
 import { Button, notification } from 'antd';
@@ -58,11 +58,15 @@ const StudyPage = () => {
   }, [cardDisplayKey, deckCards, textDisplayKey]);
 
   const finishStudy = useCallback(() => {
+    if (!deckId) {
+      return;
+    }
     setFinishLoading(true);
     clearTimeout(timerID);
     timerID = setTimeout(() => {
       try {
         finishStudyCards(deckCards.map((card) => card.storeId));
+        updateRecentUsedDeck(deckId);
         notification.success({ message: 'Study Finished' });
         navigate('/');
       } catch (error) {
@@ -71,7 +75,7 @@ const StudyPage = () => {
         setFinishLoading(false);
       }
     }, 400);
-  }, [deckCards, navigate]);
+  }, [deckCards, deckId, navigate]);
 
   if (initCards && deckCards.length === 0) {
     return <Navigate to="/" />;

@@ -3,32 +3,32 @@ import { SubTitle } from '@/common-ui/Title';
 import { AllDeckContainer } from '@/features/deck/AllDeckContainer';
 import DeckButton from '@/features/deck/DeckButton';
 import { StudyDeck } from '@/features/deck/constant';
-import { getAllDecks } from '@/features/deck/deckStore';
+import { getAllDecks, getRecentUsedDeck } from '@/features/deck/deckStore';
 import { PageRoute } from '@/routes/pageRoute';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
 const TopPage = () => {
-  const [favoriteDecks, setFavoriteDecks] = useState<StudyDeck[]>([]);
+  // const [favoriteDecks, setFavoriteDecks] = useState<StudyDeck[]>([]);
   const [recentUsedDecks, setRecentUsedDecks] = useState<StudyDeck[]>([]);
   const [allDecks, setAllDecks] = useState<StudyDeck[]>([]);
 
   useAsync(async () => {
     const allDecks = getAllDecks();
-    setFavoriteDecks([]);
-    setRecentUsedDecks([]);
+    // setFavoriteDecks([]);
+    setRecentUsedDecks(getRecentUsedDeck());
     setAllDecks(allDecks);
   });
 
   return (
     <CommonContainer>
-      <SubTitle>Favorite Decks</SubTitle>
+      {/* <SubTitle>Favorite Decks</SubTitle>
       <AllDeckContainer>
         {favoriteDecks.map((deck) => {
           return <DeckButton key={deck.storeId}>{deck.name}</DeckButton>;
         })}
-      </AllDeckContainer>
+      </AllDeckContainer> */}
       <SubTitle>Recent Used Decks</SubTitle>
       <AllDeckContainer>
         {recentUsedDecks.map((deck) => {

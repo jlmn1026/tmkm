@@ -3,6 +3,7 @@ export const storageKeys = {
   card: 'card-',
   deckMax: 'deck-max',
   deck: 'deck-',
+  recentUsedDeck: 'recent-used-deck',
 };
 
 export const getStorage = (key: string) => {
