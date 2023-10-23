@@ -1,13 +1,12 @@
 import { styled } from '@stitches/react';
 import { useAsync } from 'react-use';
 import { StudyCard } from './constant';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getAllCards } from './cardStore';
 import SelectCard from './SelectCard';
 import { addCardToDeck } from '../deck/deckStore';
 import Search from 'antd/es/input/Search';
-
-let searchTimer: NodeJS.Timeout;
+import { useCardSearch } from './useCardSearch';
 
 type Props = {
   deckId: string;
@@ -15,23 +14,11 @@ type Props = {
 };
 
 const CardSelectForDeck = ({ deckId, onSelected }: Props) => {
-  const [initCards, setInitCards] = useState<StudyCard[]>([]);
-  const [cards, setCards] = useState<StudyCard[]>([]);
-  useAsync(async () => {
-    const initAllCards = getAllCards();
-    setInitCards(initAllCards);
-    setCards(initAllCards);
-  });
+  const [filterdCards, initCards, searchCards] = useCardSearch();
 
-  const searchCards = useCallback(
-    (word: string) => {
-      clearTimeout(searchTimer);
-      setTimeout(() => {
-        setCards(initCards.filter((card) => card.texts.some((text) => text.includes(word))));
-      }, 1500);
-    },
-    [initCards]
-  );
+  useEffect(() => {
+    initCards(getAllCards());
+  }, [initCards]);
 
   return (
     <Container>
@@ -42,7 +29,7 @@ const CardSelectForDeck = ({ deckId, onSelected }: Props) => {
         }}
       />
       <AllCards>
-        {cards.map((card) => {
+        {filterdCards.map((card) => {
           return (
             <SelectCard
               key={card.storeId}
