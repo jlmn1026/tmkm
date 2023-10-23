@@ -3,6 +3,9 @@ import { styled } from '@stitches/react';
 import { StudyCard } from '../card/constant';
 import { AllCards } from '../card/CardSelectForDeck';
 import { removeCardFromDeck } from './deckStore';
+import { useCardSearch } from '../card/useCardSearch';
+import { useEffect } from 'react';
+import Search from 'antd/es/input/Search';
 
 type Props = {
   deckId: string;
@@ -11,11 +14,22 @@ type Props = {
 };
 
 const DeckCardSelect = ({ deckId, deckCards, onUnSelected }: Props) => {
+  const [filterdCards, initCards, searchCards] = useCardSearch();
+
+  useEffect(() => {
+    initCards(deckCards);
+  }, [deckCards, initCards]);
+
   return (
     <Container>
       <Title>Deck Cards</Title>
+      <Search
+        onChange={(e) => {
+          searchCards(e.target.value);
+        }}
+      />
       <AllCards>
-        {deckCards.map((card) => {
+        {filterdCards.map((card) => {
           return (
             <SelectCard
               key={card.storeId}
