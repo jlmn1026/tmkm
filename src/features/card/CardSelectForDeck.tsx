@@ -1,7 +1,5 @@
 import { styled } from '@stitches/react';
-import { useAsync } from 'react-use';
-import { StudyCard } from './constant';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getAllCards } from './cardStore';
 import SelectCard from './SelectCard';
 import { addCardToDeck } from '../deck/deckStore';

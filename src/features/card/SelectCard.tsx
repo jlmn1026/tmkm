@@ -11,6 +11,8 @@ type Props = {
 };
 
 const SelectCard = ({ card, onSelect, onUnSelect }: Props) => {
+  // TODO: ここでカードの個別読み込み
+
   return (
     <Card
       style={{ width: '80%' }}

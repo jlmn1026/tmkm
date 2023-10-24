@@ -57,11 +57,13 @@ export const getDeck = (deckId: string): StudyDeck => {
 
 export const addCardToDeck = (deckId: string, cardId: string) => {
   const deck = getStorage(`${storageKeys.deck}${deckId}`);
-  if (!deck) {
+  const card = getStorage(`${storageKeys.card}${cardId}`);
+
+  if (!deck || !card) {
     notification.error({
-      message: 'Deck not found',
+      message: 'Deck/Card not found',
     });
-    throw new Error('Deck not found');
+    throw new Error('Deck/Card not found');
   }
 
   const deckObj = JSON.parse(deck);
@@ -72,6 +74,10 @@ export const addCardToDeck = (deckId: string, cardId: string) => {
 
   deckObj.cards.push(cardId);
   setStorage(`${storageKeys.deck}${deckId}`, deckObj);
+
+  const cardObj = JSON.parse(card);
+  cardObj.deckIds = [...(cardObj.deckIds ?? []), deckId];
+  setStorage(`${storageKeys.card}${cardId}`, cardObj);
 };
 
 export const removeCardFromDeck = (deckId: string, cardId: string) => {

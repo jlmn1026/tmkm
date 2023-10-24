@@ -9,4 +9,5 @@ export type StudyCard = {
   createdAt: string;
   goalCount?: number;
   usedCount?: number;
+  deckIds?: string[];
 };
