@@ -32,6 +32,8 @@ export const addCard = (cards: InputCard[], createdAt: Date) => {
     createdAt,
   });
   setStorage(`${storageKeys.cardMax}`, maxNum + 1);
+
+  return maxNum;
 };
 
 export const getAllCards = (offset = 0, limit = 50): StudyCard[] => {

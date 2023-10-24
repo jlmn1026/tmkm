@@ -3,11 +3,14 @@ import HeadlessButton from '@/common-ui/HeadlessButton';
 import InputCardText from '@/features/card/InputCardText';
 import { addCard } from '@/features/card/cardStore';
 import { InputCard } from '@/features/card/constant';
+import { StudyDeck } from '@/features/deck/constant';
+import { addCardToDeck, getAllDecks } from '@/features/deck/deckStore';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { styled } from '@stitches/react';
-import { Button, notification } from 'antd';
+import { Button, Select, notification } from 'antd';
 
 import { useState } from 'react';
+import { useAsync } from 'react-use';
 let inputTimeId: NodeJS.Timeout;
 
 const defaultTextCards = [
@@ -22,10 +25,31 @@ const defaultTextCards = [
 ];
 
 const CreateCardPage = () => {
+  const [deckId, setDeckId] = useState<string | undefined>();
   const [inputTexts, setInputTexts] = useState<InputCard[]>(defaultTextCards);
+  const [allDeck, setAllDeck] = useState<StudyDeck[]>([]);
+  useAsync(async () => {
+    setAllDeck(getAllDecks());
+  });
 
   return (
     <CommonContainer>
+      <SelectDeckRow>
+        <Select
+          placeholder="Select Deck"
+          style={{ width: 360 }}
+          onChange={(value) => {
+            setDeckId(value);
+          }}
+          options={allDeck.map((deck) => {
+            return {
+              value: deck.storeId,
+              label: deck.name,
+            };
+          })}
+        />
+      </SelectDeckRow>
+
       {inputTexts.map((inputText, index) => {
         return (
           <InputCardText
@@ -67,7 +91,11 @@ const CreateCardPage = () => {
           }}
           onClick={() => {
             try {
-              addCard(inputTexts, new Date());
+              const cardId = addCard(inputTexts, new Date());
+              if (deckId) {
+                addCardToDeck(deckId, `${cardId}`);
+              }
+
               notification.success({
                 message: 'new Card created!',
               });
@@ -94,6 +122,10 @@ const CreateCardPage = () => {
 };
 
 export default CreateCardPage;
+
+const SelectDeckRow = styled('div', {
+  marginBottom: '24px',
+});
 
 const Footer = styled('div', {
   display: 'flex',
