@@ -1,16 +1,18 @@
 import CommonContainer from '@/common-ui/CommonContainer';
+import SaveDeckButton from '@/features/deck/SaveDeckButton';
 import { StudyDeck } from '@/features/deck/constant';
 import { getDeck, updateDeck } from '@/features/deck/deckStore';
+import { PageRoute } from '@/routes/pageRoute';
 import { styled } from '@stitches/react';
 import { Button, Input, notification } from 'antd';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useAsync, useAsyncFn } from 'react-use';
 
 const DeckPage = () => {
   const { deckId } = useParams<{ deckId: string }>();
 
-  const [deck, setDeck] = useState<StudyDeck>();
+  const [, setDeck] = useState<StudyDeck>();
   const [deckName, setDeckName] = useState<string>('');
 
   useAsync(async () => {
@@ -47,6 +49,12 @@ const DeckPage = () => {
           Change Deck Name
         </Button>
       </ChangeTitleRow>
+      <ButtonRow>
+        <Link to={`${PageRoute.EditDeck}/${deckId}`}>
+          <Button>Select Card</Button>
+        </Link>
+        <SaveDeckButton />
+      </ButtonRow>
     </CommonContainer>
   );
 };
@@ -57,4 +65,10 @@ const ChangeTitleRow = styled('div', {
   display: 'flex',
   margin: '24px 0px',
   gap: '12px',
+});
+
+const ButtonRow = styled('div', {
+  display: 'flex',
+  gap: '24px',
+  margin: '48px 0px',
 });
