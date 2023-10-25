@@ -49,12 +49,14 @@ const DeckPage = () => {
           Change Deck Name
         </Button>
       </ChangeTitleRow>
-      <ButtonRow>
-        <Link to={`${PageRoute.EditDeck}/${deckId}`}>
-          <Button>Select Card</Button>
-        </Link>
-        <SaveDeckButton />
-      </ButtonRow>
+      {deckId && (
+        <ButtonRow>
+          <Link to={`${PageRoute.EditDeck}/${deckId}`}>
+            <Button>Select Card</Button>
+          </Link>
+          <SaveDeckButton deckId={deckId} />
+        </ButtonRow>
+      )}
     </CommonContainer>
   );
 };
