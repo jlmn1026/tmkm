@@ -2,7 +2,7 @@ import { PageRoute } from '@/routes/pageRoute';
 
 export const menus = [
   {
-    name: 'Create Deck',
+    name: 'Deck',
     link: PageRoute.CreateDeck,
   },
   {

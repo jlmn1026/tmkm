@@ -10,6 +10,7 @@ import CreateDeckPage from '@/pages/CreateDeckPage';
 import EditDeckPage from '@/pages/EditDeckPage';
 import StudyPage from '@/pages/StudyPage';
 import BeforeStudyPage from '@/pages/BeforeStudyPage';
+import DeckPage from '@/pages/DeckPage';
 
 const BaseLayout = () => {
   return (
@@ -40,6 +41,11 @@ export const AppRoutes = () => {
       path: '/',
       element: <BaseLayout />,
       children: [{ path: PageRoute.CreateDeck, element: <CreateDeckPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: `${PageRoute.DeckTop}/:deckId`, element: <DeckPage /> }],
     },
     {
       path: '/',

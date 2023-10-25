@@ -80,6 +80,26 @@ export const addCardToDeck = (deckId: string, cardId: string) => {
   setStorage(`${storageKeys.card}${cardId}`, cardObj);
 };
 
+type UpdateParam = {
+  deckName?: string;
+};
+
+export const updateDeck = (deckId: string, { deckName }: UpdateParam) => {
+  const deck = getStorage(`${storageKeys.deck}${deckId}`);
+
+  if (!deck) {
+    notification.error({
+      message: 'Deck not found',
+    });
+    throw new Error('Deck not found');
+  }
+
+  const deckObj = JSON.parse(deck);
+
+  deckObj.name = deckName;
+  setStorage(`${storageKeys.deck}${deckId}`, deckObj);
+};
+
 export const removeCardFromDeck = (deckId: string, cardId: string) => {
   const deck = getStorage(`${storageKeys.deck}${deckId}`);
   const card = getStorage(`${storageKeys.card}${cardId}`);

@@ -6,4 +6,5 @@ export const PageRoute = {
   BeforeStudy: '/before-study',
   Study: '/study',
   EditDeck: '/edit-deck',
+  DeckTop: '/deck',
 };
