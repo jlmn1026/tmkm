@@ -5,7 +5,7 @@ import { addDeck, getAllDecks } from '@/features/deck/deckStore';
 import { PageRoute } from '@/routes/pageRoute';
 import { Button, Input, notification } from 'antd';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAsyncRetry } from 'react-use';
 import { styled } from '@stitches/react';
 import { AllDeckContainer } from '@/features/deck/AllDeckContainer';
@@ -15,6 +15,7 @@ const CreateDeckPage = () => {
 
   const [deckName, setDeckName] = useState<string>();
   const [creating, setCreating] = useState<boolean>(false);
+
   const {
     retry,
     value: decks,
@@ -29,7 +30,11 @@ const CreateDeckPage = () => {
 
   return (
     <CommonContainer>
-      <SubTitle>New Deck</SubTitle>
+      <InputJSONRow>
+        <Link to={'TODO:'}>
+          <Button type="primary">Input Deck From JSON</Button>
+        </Link>
+      </InputJSONRow>
       <CreateDeck>
         <Input
           placeholder="input deck name"
@@ -62,6 +67,7 @@ const CreateDeckPage = () => {
           Create Deck
         </Button>
       </CreateDeck>
+
       <SubTitle>Select Deck</SubTitle>
       <AllDeckContainer>
         {decks.map((deck) => {
@@ -86,5 +92,9 @@ export default CreateDeckPage;
 const CreateDeck = styled('div', {
   display: 'flex',
   gap: '12px',
+  margin: '12px 0px 36px 0px',
+});
+
+const InputJSONRow = styled('div', {
   margin: '12px 0px 36px 0px',
 });
