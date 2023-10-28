@@ -8,7 +8,7 @@ import { studyModeAtom } from '@/jotai/study';
 import { styled } from '@stitches/react';
 import { Button, notification } from 'antd';
 import { useAtom } from 'jotai';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
 
@@ -59,7 +59,7 @@ const StudyPage = () => {
   }, [deckId]);
 
   const beforeCard = useCallback(() => {
-    if (textDisplayKey === 0) {
+    if (textDisplayKey <= 0) {
       setCardDisplayKey(cardDisplayKey - 1);
       setTextDisplayKey(deckCards[cardDisplayKey - 1].texts.length - 1);
     } else {
@@ -68,7 +68,7 @@ const StudyPage = () => {
   }, [cardDisplayKey, deckCards, textDisplayKey]);
 
   const nextCard = useCallback(() => {
-    if (textDisplayKey === deckCards[cardDisplayKey].texts.length - 1) {
+    if (textDisplayKey >= deckCards[cardDisplayKey].texts.length - 1) {
       setCardDisplayKey(cardDisplayKey + 1);
       setTextDisplayKey(0);
     } else {
@@ -95,6 +95,41 @@ const StudyPage = () => {
       }
     }, 400);
   }, [deckCards, deckId, navigate]);
+
+  const keyDownEvent = useCallback(
+    (e: KeyboardEvent) => {
+      if (!deckId || deckCards.length === 0) {
+        return;
+      }
+      if (e.key === 'ArrowLeft' && !(textDisplayKey === 0 && cardDisplayKey === 0)) {
+        beforeCard();
+      }
+      if (
+        e.key === 'ArrowRight' &&
+        !(deckCards[cardDisplayKey].texts.length - 1 && cardDisplayKey === deckCards.length - 1)
+      ) {
+        nextCard();
+      }
+    },
+    [beforeCard, cardDisplayKey, deckCards, deckId, nextCard, textDisplayKey]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', keyDownEvent, false);
+
+    return () => {
+      return document.removeEventListener('keydown', keyDownEvent);
+    };
+  }, [
+    beforeCard,
+    cardDisplayKey,
+    deckCards,
+    deckCards.length,
+    deckId,
+    keyDownEvent,
+    nextCard,
+    textDisplayKey,
+  ]);
 
   if (initCards && deckCards.length === 0) {
     return <Navigate to="/" />;
@@ -129,9 +164,9 @@ const StudyPage = () => {
               <StudyCardView key={card.storeId}>
                 {card.texts.map((text, index) => {
                   if (index !== textDisplayKey) {
-                    return <></>;
+                    return <div key={index}></div>;
                   }
-                  return text;
+                  return <div key={index}>{text}</div>;
                 })}
               </StudyCardView>
             )}
