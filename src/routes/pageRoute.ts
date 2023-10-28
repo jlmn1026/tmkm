@@ -7,4 +7,5 @@ export const PageRoute = {
   Study: '/study',
   EditDeck: '/edit-deck',
   DeckTop: '/deck',
+  FromJSON: '/from-json',
 };

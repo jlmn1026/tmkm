@@ -31,7 +31,7 @@ const CreateDeckPage = () => {
   return (
     <CommonContainer>
       <InputJSONRow>
-        <Link to={'TODO:'}>
+        <Link to={PageRoute.FromJSON}>
           <Button type="primary">Input Deck From JSON</Button>
         </Link>
       </InputJSONRow>

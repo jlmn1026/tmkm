@@ -11,6 +11,7 @@ import EditDeckPage from '@/pages/EditDeckPage';
 import StudyPage from '@/pages/StudyPage';
 import BeforeStudyPage from '@/pages/BeforeStudyPage';
 import DeckPage from '@/pages/DeckPage';
+import InputFromJSONPage from '@/pages/InputFromJSONPage';
 
 const BaseLayout = () => {
   return (
@@ -77,6 +78,11 @@ export const AppRoutes = () => {
       path: '/',
       element: <BaseLayout />,
       children: [{ path: `${PageRoute.Study}/:deckId`, element: <StudyPage /> }],
+    },
+    {
+      path: '/',
+      element: <BaseLayout />,
+      children: [{ path: `${PageRoute.FromJSON}`, element: <InputFromJSONPage /> }],
     },
   ];
 
