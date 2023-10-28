@@ -75,7 +75,7 @@ const CreateDeckPage = () => {
             <DeckButton
               key={deck.storeId}
               onClick={() => {
-                navigate(`${PageRoute.EditDeck}/${deck.storeId}`);
+                navigate(`${PageRoute.DeckTop}/${deck.storeId}`);
               }}
             >
               {deck.name}
