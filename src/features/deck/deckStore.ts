@@ -29,6 +29,29 @@ export const addDeck = (deckName: string, createdAt: Date) => {
   setStorage(`${storageKeys.deckMax}`, maxNum + 1, false);
 };
 
+export const addDeckFromJSON = (deckName: string, cardIds: string[], createdAt: Date) => {
+  if (!deckName) {
+    notification.error({
+      message: 'please input deck name',
+    });
+    throw new Error('No deck name');
+  }
+
+  const maxNum: number = Number(getStorage(storageKeys.deckMax) ?? 0);
+
+  if (maxNum === 0) {
+    resetCard();
+  }
+
+  setStorage(`${storageKeys.deck}${maxNum}`, {
+    storeId: maxNum,
+    name: deckName,
+    cards: cardIds,
+    createdAt,
+  });
+  setStorage(`${storageKeys.deckMax}`, maxNum + 1, false);
+};
+
 export const getAllDecks = (offset = 0, limit = 50): StudyDeck[] => {
   const maxNum: number = Number(getStorage(storageKeys.deckMax) ?? 0);
   const lastIndex = maxNum - offset;

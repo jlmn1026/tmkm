@@ -6,19 +6,19 @@ export const resetCard = () => {
   setStorage(storageKeys.cardMax, '1', false);
 };
 
-export const addCard = (cards: InputCard[], createdAt: Date) => {
-  const valdation = cards.filter((card) => {
+const validCardText = (cards: InputCard[]) => {
+  cards.filter((card) => {
     if (card.text.replace(/\s/g, '').length === 0) {
-      return true;
+      notification.error({
+        message: 'Some text has not been entered',
+      });
+      throw new Error('Some text has not been entered');
     }
-    return false;
   });
-  if (valdation.length > 0) {
-    notification.error({
-      message: 'Some text has not been entered',
-    });
-    throw new Error('Some text has not been entered');
-  }
+};
+
+export const addCard = (cards: InputCard[], createdAt: Date) => {
+  validCardText(cards);
 
   const maxNum: number = Number(getStorage(storageKeys.cardMax) ?? 0);
 
@@ -34,6 +34,36 @@ export const addCard = (cards: InputCard[], createdAt: Date) => {
   setStorage(`${storageKeys.cardMax}`, maxNum + 1);
 
   return maxNum;
+};
+
+// Consider duplicates
+export const addCardFromJSON = (cards: StudyCard[], createdAt: Date): string[] => {
+  let maxNum: number = Number(getStorage(storageKeys.cardMax) ?? 0);
+
+  if (maxNum === 0) {
+    resetCard();
+  }
+
+  const allCards = getAllCards();
+
+  const storeIds = cards.map((card) => {
+    const existCard = allCards.find(
+      (c) => c.texts[0] === card.texts[0] && JSON.stringify(c.texts) === JSON.stringify(card.texts)
+    );
+
+    if (!existCard) {
+      setStorage(`${storageKeys.card}${maxNum}`, {
+        storeId: maxNum,
+        texts: card.texts,
+        createdAt,
+      });
+      return `${maxNum++}`;
+    }
+
+    return existCard.storeId;
+  });
+
+  return storeIds;
 };
 
 export const getAllCards = (offset = 0, limit = 50): StudyCard[] => {

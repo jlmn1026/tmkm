@@ -1,15 +1,20 @@
 import CommonContainer from '@/common-ui/CommonContainer';
 import { SubTitle } from '@/common-ui/Title';
 import DisplayCard from '@/features/card/DisplayCard';
+import { addCardFromJSON } from '@/features/card/cardStore';
 import { StudyCard } from '@/features/card/constant';
 import { StudyDeck } from '@/features/deck/constant';
+import { addDeckFromJSON } from '@/features/deck/deckStore';
+import { PageRoute } from '@/routes/pageRoute';
 import { styled } from '@stitches/react';
-import { Button, Upload, message } from 'antd';
+import { Button, Upload, message, notification } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const { Dragger } = Upload;
 
 const InputFromJSONPage = () => {
+  const navigate = useNavigate();
   const [loadDeck, setLoadDeck] = useState<StudyDeck>();
   const [loadCards, setLoadCards] = useState<StudyCard[]>([]);
   return (
@@ -44,10 +49,21 @@ const InputFromJSONPage = () => {
           <DandDText>Click or drag json file to this area to upload</DandDText>
         </Dragger>
       </DraggerArea>
-      <LoadedDeckRow>
-        <div>Deck Name: {loadDeck?.name}</div>
-        <Button onClick={() => {}}>Save This Deck & Card</Button>
-      </LoadedDeckRow>
+      {loadDeck && (
+        <LoadedDeckRow>
+          <div>Deck Name: {loadDeck?.name}</div>
+          <Button
+            onClick={() => {
+              const cardIDs = addCardFromJSON(loadCards, new Date());
+              addDeckFromJSON(loadDeck?.name, cardIDs, new Date());
+              notification.success({ message: 'Deck & Card saved' });
+              navigate(PageRoute.CreateDeck);
+            }}
+          >
+            Save This Deck & Card
+          </Button>
+        </LoadedDeckRow>
+      )}
       <LoadedCards>
         {loadCards.map((card) => {
           return <DisplayCard card={card} key={card.storeId} />;
