@@ -106,7 +106,10 @@ const StudyPage = () => {
       }
       if (
         e.key === 'ArrowRight' &&
-        !(deckCards[cardDisplayKey].texts.length - 1 && cardDisplayKey === deckCards.length - 1)
+        !(
+          textDisplayKey === deckCards[cardDisplayKey].texts.length - 1 &&
+          cardDisplayKey === deckCards.length - 1
+        )
       ) {
         nextCard();
       }
