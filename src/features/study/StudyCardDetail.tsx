@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { StudyCard } from '../card/constant';
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import { useCallback, useState } from 'react';
 import { storeCardGoalCount } from '../card/cardStore';
 import { styled } from '@stitches/react';
@@ -38,21 +38,25 @@ const StudyCardDetail = ({ show, card, cardNumber, deckLength }: Props) => {
       <div>UesedCount: {card.usedCount ?? 0}</div>
       <GoalCount>
         GoalCount:{' '}
-        <Button
-          onClick={() => {
-            changeGoalCount(-1);
-          }}
-        >
-          -
-        </Button>
+        <Popover placement="bottom" content="If you remember well enough, decrease point">
+          <Button
+            onClick={() => {
+              changeGoalCount(-1);
+            }}
+          >
+            -
+          </Button>
+        </Popover>
         {goalCount}
-        <Button
-          onClick={() => {
-            changeGoalCount(1);
-          }}
-        >
-          +
-        </Button>
+        <Popover placement="bottom" content="If you want to learn more, increase point">
+          <Button
+            onClick={() => {
+              changeGoalCount(1);
+            }}
+          >
+            +
+          </Button>
+        </Popover>
       </GoalCount>
     </CardInfo>
   );

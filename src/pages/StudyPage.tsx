@@ -6,7 +6,7 @@ import { getDeck, updateRecentUsedDeck } from '@/features/deck/deckStore';
 import StudyCardDetail from '@/features/study/StudyCardDetail';
 import { studyModeAtom } from '@/jotai/study';
 import { styled } from '@stitches/react';
-import { Button, notification } from 'antd';
+import { Button, Popover, notification } from 'antd';
 import { useAtom } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -178,15 +178,20 @@ const StudyPage = () => {
       })}
       <ButtonContainer>
         <ButtonGroup>
-          <Button type="primary" disabled={firstCardText} onClick={beforeCard}>
-            Prev
-          </Button>
+          <Popover placement="top" content="Press ←">
+            <Button type="primary" disabled={firstCardText} onClick={beforeCard}>
+              Prev
+            </Button>
+          </Popover>
+
           <Button type="primary" onClick={finishStudy}>
             Finish
           </Button>
-          <Button type="primary" disabled={lastCardText} onClick={nextCard}>
-            Next
-          </Button>
+          <Popover placement="top" content="Press →">
+            <Button type="primary" disabled={lastCardText} onClick={nextCard}>
+              Next
+            </Button>
+          </Popover>
         </ButtonGroup>
       </ButtonContainer>
     </CommonContainer>
