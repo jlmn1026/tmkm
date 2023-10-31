@@ -2,23 +2,29 @@ import CommonContainer from '@/common-ui/CommonContainer';
 import { SubTitle } from '@/common-ui/Title';
 import DisplayCard from '@/features/card/DisplayCard';
 import { getAllCards } from '@/features/card/cardStore';
-import { StudyCard } from '@/features/card/constant';
+import { useCardSearch } from '@/features/card/useCardSearch';
 import { styled } from '@/stitches.config';
+import Search from 'antd/es/input/Search';
 
-import { useState } from 'react';
 import { useAsync } from 'react-use';
 
 const CardListPage = () => {
-  const [cardCards, setCards] = useState<StudyCard[]>([]);
+  const [filterdCards, initCards, searchCards] = useCardSearch();
+
   useAsync(async () => {
-    setCards(getAllCards());
+    initCards(getAllCards());
   });
 
   return (
     <CommonContainer>
       <SubTitle>CardList</SubTitle>
+      <Search
+        onChange={(e) => {
+          searchCards(e.target.value);
+        }}
+      />
       <CardList>
-        {cardCards.map((card) => {
+        {filterdCards.map((card) => {
           return <DisplayCard key={card.storeId} card={card} />;
         })}
       </CardList>
